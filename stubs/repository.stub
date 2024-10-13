@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace {{ namespace }};
 
-use {{ rootNamespace }}\Models\{{ class }};
-use Illuminate\Database\Eloquent\Builder;
+use {{ rootNamespace }}Models\{{ class }};
+use Illuminate\Database\Eloquent\Model;
 use Mattbit\Larepo\Repositories\EloquentRepository;
 
 final class {{ class }}Repository extends EloquentRepository
 {
-    public function query(): Builder
+    public function model(): Model
     {
-        return {{ class }}::query();
+        return new {{ class }}();
     }
 }

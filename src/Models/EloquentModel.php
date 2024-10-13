@@ -7,7 +7,7 @@ namespace Mattbit\Larepo\Models;
 use Illuminate\Database\Eloquent\Model;
 use RuntimeException;
 
-abstract class EloquentModel extends Model implements EloquentModelInterface, ModelInterface
+abstract class EloquentModel extends Model implements EloquentModelInterface
 {
     public function __get($key)
     {

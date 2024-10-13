@@ -12,6 +12,11 @@ class RepositoryMakeCommand extends GeneratorCommand
     protected $description = 'Create a new repository class';
     protected $type = 'Repository';
 
+    protected function getPath($name)
+    {
+        return parent::getPath($name . 'Repository');
+    }
+
     protected function getStub()
     {
         return __DIR__ . '/../../../stubs/repository.stub';
