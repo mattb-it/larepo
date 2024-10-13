@@ -8,7 +8,7 @@ use {{ rootNamespace }}Models\{{ class }};
 use Illuminate\Database\Eloquent\Model;
 use Mattbit\Larepo\Repositories\EloquentRepository;
 
-final class {{ class }}Repository extends EloquentRepository
+class {{ class }}Repository extends EloquentRepository
 {
     public function model(): Model
     {
