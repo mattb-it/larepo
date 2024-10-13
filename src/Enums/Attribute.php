@@ -15,4 +15,9 @@ enum Attribute: string
             default => false,
         };
     }
+
+    public static function isDefined(mixed $value): bool
+    {
+        return !self::isUndefined($value);
+    }
 }
