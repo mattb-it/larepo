@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Mattbit\Larepo\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Mattbit\Larepo\DTO\ModelDTOInterface;
-use Mattbit\Larepo\Models\EloquentModelInterface;
 
 abstract class EloquentRepository implements EloquentRepositoryInterface
 {
@@ -22,14 +22,15 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         return $this->query()->get();
     }
 
-    public function find(mixed $value, ?string $attribute = null): ?EloquentModelInterface
+    public function find(mixed $value, ?string $attribute = null): ?Model
     {
         return $this->query()
-            ->when(is_null($attribute), fn(Builder $query) => $query->find($value))
-            ->when(!is_null($attribute), fn(Builder $query) => $query->where($attribute, $value)->first());
+            ->when(is_null($attribute), fn(Builder $query) => $query->whereKey($value))
+            ->when(!is_null($attribute), fn(Builder $query) => $query->where($attribute, $value))
+            ->first();
     }
 
-    public function findOrFail(mixed $value, ?string $attribute = null): EloquentModelInterface
+    public function findOrFail(mixed $value, ?string $attribute = null): Model
     {
         $model = $this->find($value, $attribute);
         if (is_null($model)) {
@@ -38,7 +39,7 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         return $model;
     }
 
-    public function save(ModelDTOInterface $dto, EloquentModelInterface $model): EloquentModelInterface
+    public function save(ModelDTOInterface $dto, Model $model): Model
     {
         foreach (get_object_vars($dto) as $attribute => $value) {
             $model->setAttribute($attribute, $value);
@@ -47,7 +48,7 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         return $model;
     }
 
-    public function delete(EloquentModelInterface $model): bool
+    public function delete(Model $model): bool
     {
         return (bool)$model->delete();
     }
