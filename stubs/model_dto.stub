@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace {{ namespace }};
 
 use Mattbit\Larepo\DTO\ModelDTOInterface;
+use Mattbit\Larepo\Enums\Attribute;
 
 readonly class {{ class }}DTO implements ModelDTOInterface
 {
     public function __construct(
-        public int $id,
+        public Attribute|int $id = Attribute::UNDEFINED,
     ) {}
 }

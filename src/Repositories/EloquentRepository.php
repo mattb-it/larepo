@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Mattbit\Larepo\DTO\ModelDTOInterface;
+use Mattbit\Larepo\Enums\Attribute;
 
 abstract class EloquentRepository implements EloquentRepositoryInterface
 {
@@ -41,9 +42,10 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
 
     public function save(ModelDTOInterface $dto, Model $model): Model
     {
-        foreach (get_object_vars($dto) as $attribute => $value) {
-            $model->setAttribute($attribute, $value);
-        }
+        collect(get_object_vars($dto))
+            ->filter(fn(mixed $value, string $attribute) => Attribute::isUndefined($value))
+            ->each(fn(mixed $value, string $attribute) => $model->setAttribute($attribute, $value));
+
         $model->save();
         return $model;
     }
