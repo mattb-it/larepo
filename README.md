@@ -4,6 +4,8 @@
 ![Latest version](https://img.shields.io/github/release/mattb-it/larepo.svg?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)
 
+📄 [Online Documentation](https://mattb.it/docs/larepo)
+
 ## Introduction
 
 This package is designed to help developers organize their code by offering a simplified approach to
