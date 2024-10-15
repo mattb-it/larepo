@@ -1,5 +1,9 @@
 # Larepo - Laravel Repository
 
+![Test build](https://github.com/mattb-it/larepo/actions/workflows/test.yml/badge.svg)
+![Latest version](https://img.shields.io/github/release/mattb-it/larepo.svg?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)
+
 ## Introduction
 
 This package is designed to help developers organize their code by offering a simplified approach to
