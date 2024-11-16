@@ -64,3 +64,26 @@ it('can save only defined attributes', function () use ($userDTO) {
     $userModelMock->shouldHaveReceived('setAttribute')->with('name', 'John Doe');
     $userModelMock->shouldHaveReceived('save');
 });
+
+it('can create a new model', function () use ($userDTO) {
+    $model = \Mockery::spy(\Illuminate\Database\Eloquent\Model::class);
+
+    $userRepository = new class($model) extends \Mattbit\Larepo\Repositories\EloquentRepository {
+
+        public function __construct(private \Illuminate\Database\Eloquent\Model $model) {}
+
+        public function model(): \Illuminate\Database\Eloquent\Model
+        {
+            return $this->model;
+        }
+    };
+
+    $userRepository->save(
+        new $userDTO(
+            name: 'John Doe',
+        ),
+    );
+
+    $model->shouldHaveReceived('setAttribute')->with('name', 'John Doe');
+    $model->shouldHaveReceived('save');
+});

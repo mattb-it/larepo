@@ -219,4 +219,14 @@ $this->userRepository->save(
 );
 ```
 
-This method returns the updated model instance.
+You can also execute this method without model parameter to create a new model:
+
+```php
+$user = $this->userRepository->save(
+    dto: new UserDTO(
+        name: 'John Doe',
+    ),
+);
+```
+
+This method returns the created/updated model instance.

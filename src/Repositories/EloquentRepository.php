@@ -40,8 +40,10 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         return $model;
     }
 
-    public function save(ModelDTOInterface $dto, Model $model): Model
+    public function save(ModelDTOInterface $dto, ?Model $model = null): Model
     {
+        $model = $model ?? $this->model();
+
         collect(get_object_vars($dto))
             ->filter(fn(mixed $value, string $attribute) => Attribute::isDefined($value))
             ->each(fn(mixed $value, string $attribute) => $model->setAttribute($attribute, $value));
