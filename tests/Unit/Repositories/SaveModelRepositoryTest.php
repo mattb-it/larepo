@@ -6,6 +6,7 @@ $userDTO = new class implements \Mattbit\Larepo\DTO\ModelDTOInterface {
     public function __construct(
         public Attribute|int $id = Attribute::UNDEFINED,
         public Attribute|string $name = Attribute::UNDEFINED,
+        public Attribute|string $camelCaseAttribute = Attribute::UNDEFINED,
     ) {
     }
 };
@@ -86,4 +87,32 @@ it('can create a new model', function () use ($userDTO) {
 
     $model->shouldHaveReceived('setAttribute')->with('name', 'John Doe');
     $model->shouldHaveReceived('save');
+});
+
+it('can save camelCase attribute', function () use ($userDTO) {
+    $userRepository = new class extends \Mattbit\Larepo\Repositories\EloquentRepository {
+        public function model(): \Illuminate\Database\Eloquent\Model
+        {
+            return new class extends \Illuminate\Database\Eloquent\Model {
+                public function newQuery()
+                {
+                    return \Mockery::mock(\Illuminate\Database\Eloquent\Builder::class);
+                }
+            };
+        }
+    };
+
+    $userModelMock = \Mockery::spy(\Illuminate\Database\Eloquent\Model::class);
+
+    $userRepository->save(
+        new $userDTO(
+            name: 'John Doe',
+            camelCaseAttribute: 'value',
+        ),
+        $userModelMock,
+    );
+
+    $userModelMock->shouldHaveReceived('setAttribute')->with('name', 'John Doe');
+    $userModelMock->shouldHaveReceived('setAttribute')->with('camel_case_attribute', 'value');
+    $userModelMock->shouldHaveReceived('save');
 });

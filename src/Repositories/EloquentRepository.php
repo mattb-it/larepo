@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Mattbit\Larepo\DTO\ModelDTOInterface;
 use Mattbit\Larepo\Enums\Attribute;
 
@@ -45,7 +46,11 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         $model = $model ?? $this->model();
 
         collect(get_object_vars($dto))
+            // Filter out undefined attributes
             ->filter(fn(mixed $value, string $attribute) => Attribute::isDefined($value))
+            // Map attribute names to snake case
+            ->mapWithKeys(fn(mixed $value, string $attribute) => [Str::snake($attribute) => $value])
+            // Set attributes on the model
             ->each(fn(mixed $value, string $attribute) => $model->setAttribute($attribute, $value));
 
         $model->save();
